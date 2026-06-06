@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dominion Randomizer</title>
+    <script src="nl_translations.js" onerror="console.warn('nl_translations.js not found yet')"></script>
     <style>
         :root { --bg: #1e1e2e; --surface: #313244; --text: #cdd6f4; --primary: #cba6f7; --secondary: #89b4fa; --accent: #f38ba8; --border: #45475a; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -289,12 +290,21 @@
             kingdom.sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
 
             // Render
+            renderKingdom();
+
+            const themeNames = { random: 'Balanced Set', engine: 'Engine Theme', attack: 'Attack Heavy Theme', bigmoney: 'Big Money Theme' };
+            const themeDisplay = document.getElementById('themeDisplay');
+            themeDisplay.textContent = `Current Theme: ${themeNames[theme]}`;
+            themeDisplay.style.display = 'inline-block';
+        }
+
+        function renderKingdom() {
             const results = document.getElementById('results');
             results.innerHTML = '';
             
             const lang = document.getElementById('langSwitch').value;
             
-            kingdom.forEach(card => {
+            currentKingdom.forEach(card => {
                 const cardEl = document.createElement('div');
                 cardEl.className = `card ${card.types.includes('Attack') ? 'attack' : ''} ${card.types.includes('Reaction') ? 'reaction' : ''}`;
                 
@@ -303,7 +313,9 @@
                 
                 if (lang === 'nl' && window.nlTranslations && nlTranslations[card.name]) {
                     displayName = nlTranslations[card.name].name || card.name;
-                    displayTypes = card.types.map(t => window.nlTypes[t] || t).join(' - ');
+                    if(window.nlTypes) {
+                        displayTypes = card.types.map(t => window.nlTypes[t] || t).join(' - ');
+                    }
                 }
                 
                 cardEl.innerHTML = `
@@ -314,11 +326,6 @@
                 `;
                 results.appendChild(cardEl);
             });
-
-            const themeNames = { random: 'Balanced Set', engine: 'Engine Theme', attack: 'Attack Heavy Theme', bigmoney: 'Big Money Theme' };
-            const themeDisplay = document.getElementById('themeDisplay');
-            themeDisplay.textContent = `Current Theme: ${themeNames[theme]}`;
-            themeDisplay.style.display = 'inline-block';
         }
         
         function renderInfoPage() {
@@ -352,7 +359,9 @@
                 if (lang === 'nl' && window.nlTranslations && nlTranslations[card.name]) {
                     displayName = nlTranslations[card.name].name || card.name;
                     displayDesc = nlTranslations[card.name].description || card.description;
-                    displayTypes = card.types.map(t => window.nlTypes[t] || t).join(' - ');
+                    if(window.nlTypes) {
+                        displayTypes = card.types.map(t => window.nlTypes[t] || t).join(' - ');
+                    }
                 }
                 
                 item.innerHTML = `
@@ -368,16 +377,8 @@
         const originalUpdateLanguage = updateLanguage;
         window.updateLanguage = function() {
             originalUpdateLanguage();
-            if (currentKingdom.length > 0 && document.getElementById('randomizer-view').style.display !== 'none') {
-                // Re-render kingdom with new language
-                const results = document.getElementById('results');
-                if(results.innerHTML !== '') {
-                    // Call generateSet won't work because it re-rolls. We just need to re-render.
-                    // Instead of full logic, we can just hide and show or extract render logic.
-                    // For now, let's just trigger a re-render of Info page since it handles it.
-                    // Actually, let's just leave the kingdom cards as they are until next generation,
-                    // or better, extract rendering! Since it's quick, let's just force info page update.
-                }
+            if (currentKingdom.length > 0) {
+                renderKingdom();
             }
         };
         
@@ -385,6 +386,5 @@
         updateLanguage();
         loadCards();
     </script>
-    <script src="nl_translations.js" onerror="console.warn('nl_translations.js not found yet')"></script>
 </body>
 </html>
