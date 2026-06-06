@@ -311,8 +311,8 @@
                 let displayName = card.name;
                 let displayTypes = card.types.join(' - ');
                 
-                if (lang === 'nl' && window.nlTranslations && nlTranslations[card.name]) {
-                    displayName = nlTranslations[card.name].name || card.name;
+                if (lang === 'nl' && window.nlTranslations && window.nlTranslations[card.name]) {
+                    displayName = window.nlTranslations[card.name].name || card.name;
                     if(window.nlTypes) {
                         displayTypes = card.types.map(t => window.nlTypes[t] || t).join(' - ');
                     }
@@ -356,9 +356,9 @@
                 let displayDesc = card.description;
                 let displayTypes = card.types.join(' - ');
                 
-                if (lang === 'nl' && window.nlTranslations && nlTranslations[card.name]) {
-                    displayName = nlTranslations[card.name].name || card.name;
-                    displayDesc = nlTranslations[card.name].description || card.description;
+                if (lang === 'nl' && window.nlTranslations && window.nlTranslations[card.name]) {
+                    displayName = window.nlTranslations[card.name].name || card.name;
+                    displayDesc = window.nlTranslations[card.name].description || card.description;
                     if(window.nlTypes) {
                         displayTypes = card.types.map(t => window.nlTypes[t] || t).join(' - ');
                     }

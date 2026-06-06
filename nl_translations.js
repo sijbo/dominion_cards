@@ -1,5 +1,5 @@
 // Auto-generated Dutch translations
-const nlTranslations = {
+window.nlTranslations = {
   "Bank": {
     "name": "Bank",
     "description": "Als je dit speelt, is het 1 munt waard per schatkaart die je in het spel hebt (dit telt mee)."
@@ -877,7 +877,7 @@ const nlTranslations = {
     "description": "Actie - Verzamelen"
   }
 };
-const nlTypes = {
+window.nlTypes = {
   "Action": "Actie",
   "Treasure": "Schat",
   "Victory": "Overwinning",
